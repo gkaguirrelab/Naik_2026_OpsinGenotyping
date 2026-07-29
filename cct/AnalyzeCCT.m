@@ -1,32 +1,37 @@
+% Analyze the CCT-T and CCT-E data for subjects in the Naik et al. paper.
 
 % Initialize
 clear; close all;
 
+% Set project name
+theProject = 'Naik_2026_OpsinGenotyping';
+
 % Data locations
-MTRP_datapath = "/Users/dhb/Aguirre-Brainard Lab Dropbox/David Brainard/MTRP_data";
-CCTT_subdir = 'Exp_CCTT';
-CCTE_subdir = 'Exp_CCTE';
+CCTTdir = getpref(theProject,'ccttDir');
+CCTEdir = getpref(theProject,'ccteDir');
+inputDir = getpref(theProject,'inputDir');
 
 % Output locations.  Assumes program being run from diretory containing it.
 baseDir = pwd;
-outputDir = fullfile(baseDir,'CCTAnalysis');
+outputDir = getpref(theProject,'outputDir');
 if (~exist(outputDir,'dir'))
     mkdir(outputDir);
 end
-outputData = struct;
-subjectTableName = 'UPenn_ID_conversion_log.xlsx';
+outputFile = 'PhenotypeSummary.xlsx';
 
 % Subjects
-subjectTable = readtable(fullfile(baseDir,subjectTableName),ReadVariableNames=false);
+subjectTableName = 'UPenn_ID_conversion_log.xlsx';
+subjectTable = readtable(fullfile(inputDir,subjectTableName),ReadVariableNames=false);
 
 % Loop over subjects
+outputData = struct;
 for ss = 1:size(subjectTable,1)
     outputData(ss).pennSubject = subjectTable.Var1{ss};
     outputData(ss).nihSubject = subjectTable.Var2{ss};
     fprintf('Analyzing CCT for subject %s/%s\n',outputData(ss).pennSubject,outputData(ss).nihSubject);
 
     % CCTT
-    dataDir = fullfile(MTRP_datapath,CCTT_subdir,['Subject_' outputData(ss).pennSubject]);
+    dataDir = fullfile(CCTTdir,['Subject_' outputData(ss).pennSubject]);
     theDatafiles = dir(fullfile(dataDir,[outputData(ss).pennSubject '_*.txt']));
     if (length(theDatafiles)) == 0
         fprintf('\tNo CCT-T data files for subject %s\n',outputData(ss).pennSubject);
@@ -79,11 +84,10 @@ for ss = 1:size(subjectTable,1)
             fprintf('\tCCT-T indicates RG_NORMAL\n');
             outputData(ss).CCTTRGdefectStr = 'RG_NORMAL';
         end
-
     end
 
     % CCTE
-    dataDir = fullfile(MTRP_datapath,CCTE_subdir,['Subject_' outputData(ss).pennSubject]);
+    dataDir = fullfile(CCTEdir,['Subject_' outputData(ss).pennSubject]);
     theDatafiles = dir(fullfile(dataDir,[outputData(ss).pennSubject '_*.txt']));
     if (length(theDatafiles)) == 0
         fprintf('\tNo CCT-E data files for subject %s\n',outputData(ss).pennSubject);
@@ -95,7 +99,12 @@ for ss = 1:size(subjectTable,1)
             title(['CCT-E ' outputData(ss).pennSubject]);
 
             fprintf('\tMajor/minor axis ratio of fit ellipse: %0.1f\n',fitMajorMinorAxisRatio);
-            fprintf('\tFit half major axis length: %0.1f\n',1000*fitMajorAxisLength/2);
+            fprintf('\tMajor axis diameter: %0.1f * 10^-5\n',fitMajorAxisLength*10^5);
+            fprintf('\tArea: %0.1f * 10^-6\n',fitArea*10^6)
         end
     end
 end
+
+% Make and write output summary table
+T = struct2table(outputData);
+writetable(T,fullfile(outputDir,outputFile));
