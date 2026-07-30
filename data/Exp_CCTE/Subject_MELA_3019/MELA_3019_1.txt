@@ -1,0 +1,36 @@
+PSYKINEMATIX SESSION DATA 
+
+CCTE - CCT-Ellipse
+MELA_3019 (control)
+#1 (08/07/19)
+
+Independent Variables
+ Variable	Value	
+v_prime_w	0.4689	
+u_prime_w	0.1977	
+
+
+Saturation
+Condition	Mean	Std	Variables	
+azimuth	0.02192386	0.003512829	az = 0.9425	
+azimuth	0.01943504	0.001887238	az = 5.6549	
+azimuth	0.01990317	0.003189055	az = 3.7699	
+azimuth	0.03539561	0.005650152	az = 2.5133	
+azimuth	0.02068769	0.002394153	az = 2.1991	
+azimuth	0.04628718	0.006186588	az = 0.3142	
+azimuth	0.01718334	0.001668563	az = 1.2566	
+azimuth	0.01057389	0.001191182	az = 4.0841	
+azimuth	0.0515504	0.003180899	az = 2.8274	
+azimuth	0.05236		0.002155544	az = 3.1416	
+azimuth	0.01350536	0.002195888	az = 4.7124	
+azimuth	0.01751006	0.002026412	az = 1.885	
+azimuth	0.01475521	0.003173248	az = 1.5708	
+azimuth	0.03597627	0.004052853	az = 3.4558	
+azimuth	0.0125872	0.003077633	az = 5.3407	
+azimuth	0.04205811	0.01319374	az = 5.969	
+azimuth	0.02106756	0.004476345	az = 0.6283	
+azimuth	0.055	0	az = 0	
+azimuth	0.01616975	0.002428282	az = 4.3982	
+azimuth	0.01057389	0.001191182	az = 5.0265	
+
+EventsKind	Name	StartTime	EndTime	Prefly	Onset	Offset	Duration	stimulusRT
