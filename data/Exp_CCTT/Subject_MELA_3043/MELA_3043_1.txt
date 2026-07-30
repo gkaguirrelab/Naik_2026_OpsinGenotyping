@@ -1,0 +1,1 @@
+PSYKINEMATIX SESSION DATACCTT - CCT-TrivectorMELA_3043 (control)#1 (08/11/19, 12:17:12)SaturationCondition	Mean	Std	Variables	azimuth	0.02917236	0.007326841	az = 5.98	azimuth	0.055	0	az = 0.07	azimuth	0.006379808	0.001361343	az = 4.83	
