@@ -7,8 +7,9 @@ clear; close all;
 theProject = 'Naik_2026_OpsinGenotyping';
 
 % Data locations
-CCTTdir = getpref(theProject,'ccttDir');
-CCTEdir = getpref(theProject,'ccteDir');
+CCTTDir = getpref(theProject,'ccttDir');
+CCTEDir = getpref(theProject,'ccteDir');
+anomDir = getpref(theProject,'anomDir');
 inputDir = getpref(theProject,'inputDir');
 
 % Output locations.  Assumes program being run from diretory containing it.
@@ -31,7 +32,7 @@ for ss = 1:size(subjectTable,1)
     fprintf('Analyzing CCT for subject %s/%s\n',outputData(ss).pennSubject,outputData(ss).nihSubject);
 
     % CCTT
-    dataDir = fullfile(CCTTdir,['Subject_' outputData(ss).pennSubject]);
+    dataDir = fullfile(CCTTDir,['Subject_' outputData(ss).pennSubject]);
     theDatafiles = dir(fullfile(dataDir,[outputData(ss).pennSubject '_*.txt']));
     if (length(theDatafiles)) == 0
         fprintf('\tNo CCT-T data files for subject %s\n',outputData(ss).pennSubject);
@@ -87,7 +88,7 @@ for ss = 1:size(subjectTable,1)
     end
 
     % CCTE
-    dataDir = fullfile(CCTEdir,['Subject_' outputData(ss).pennSubject]);
+    dataDir = fullfile(CCTEDir,['Subject_' outputData(ss).pennSubject]);
     theDatafiles = dir(fullfile(dataDir,[outputData(ss).pennSubject '_*.txt']));
     if (length(theDatafiles)) == 0
         fprintf('\tNo CCT-E data files for subject %s\n',outputData(ss).pennSubject);
@@ -103,7 +104,25 @@ for ss = 1:size(subjectTable,1)
             fprintf('\tArea: %0.1f * 10^-6\n',fitArea*10^6)
         end
     end
+
+    % Oculus
+    dataDir = fullfile(anomDir,[outputData(ss).pennSubject]);
+    pdfDatafiles = dir(fullfile(dataDir,[outputData(ss).pennSubject '_*.pdf']));
+    xpsDatafiles = dir(fullfile(dataDir,[outputData(ss).pennSubject '_*.xps']));
+    if (length(pdfDatafiles) ~= length(xpsDatafiles))
+        error('Mismatch in number of Oculus pdf and xps data files');
+    end
+    if (length(pdfDatafiles)) == 0
+        fprintf('\tNo Oculus data files for subject %s\n',outputData(ss).pennSubject);
+    else
+        for ff = 1:length(pdfDatafiles)
+            fprintf('\tReading Oculus data files %s, %s\n',pdfDatafiles(ff).name,xpsDatafiles(ff).name);
+            result = read_oculus_anomaloscope(fullfile(dataDir,pdfDatafiles(ff).name),fullfile(dataDir,xpsDatafiles(ff).name));
+            result
+        end
+    end
 end
+
 
 % Make and write output summary table
 T = struct2table(outputData);
