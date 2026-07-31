@@ -20,11 +20,12 @@ function fields = parseOculusText(txt)
     fields.matchingRangeType = getToken(txt, 'Matching range:\s*(.*?)\s*(?:Duration:|Anomaly quotient AQ:)', 1);
     fields.duration          = getToken(txt, 'Duration:\s*([0-9:]+)', 1);
 
-    % AQ range
-    aq = regexp(txt, 'Anomaly quotient AQ:\s*([0-9.]+)\s*to\s*([0-9.]+)', 'tokens', 'once');
+    % AQ range — the instrument reports ∞ (char 8734) when range extends to infinity
+    infPat = char(8734);
+    aq = regexp(txt, ['Anomaly quotient AQ:\s*([0-9.]+|' infPat ')\s*to\s*([0-9.]+|' infPat ')'], 'tokens', 'once');
     if ~isempty(aq)
-        fields.AQ_low  = str2double(aq{1});
-        fields.AQ_high = str2double(aq{2});
+        fields.AQ_low  = aqVal(aq{1});
+        fields.AQ_high = aqVal(aq{2});
     else
         fields.AQ_low  = [];
         fields.AQ_high = [];
@@ -66,4 +67,10 @@ function fields = parseOculusText(txt)
     end
 end
 
-
+function v = aqVal(s)
+    if strcmp(s, char(8734))
+        v = Inf;
+    else
+        v = str2double(s);
+    end
+end

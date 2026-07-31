@@ -1,4 +1,4 @@
-% Analyze the CCT-T and CCT-E data for subjects in the Naik et al. paper.
+% Analyze the phenotyping data for subjects in the Naik et al. paper.
 
 % Initialize
 clear; close all;

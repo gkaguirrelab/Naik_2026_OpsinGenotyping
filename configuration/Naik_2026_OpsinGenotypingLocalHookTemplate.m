@@ -55,9 +55,10 @@ end
 %% Set preferences for project i/o
 %
 % This is where the psychophysical data are stored
-ccttDir = fullfile(projectBaseDir,'MTRP_data','Exp_CCTT');
-ccteDir = fullfile(projectBaseDir,'MTRP_data','Exp_CCTE');
-anomDir = fullfile(projectBaseDir,'MTRP_data','Exp_Anomaloscope');
+ccttDir = fullfile(projectBaseDir,'data','Exp_CCTT');
+ccteDir = fullfile(projectBaseDir,'data','Exp_CCTE');
+%anomDir = fullfile(projectBaseDir,'data','Exp_Anomaloscope');
+anomDir = fullfile(baseDir,'MTRP_data','Exp_Anomaloscope');
 
 % This is where the input spreadsheet lives
 inputDir = fullfile(projectBaseDir,'input');

@@ -7,13 +7,17 @@ function txt = extractTextFromXpsLikeFile(xpsFile)
 
     cleanupObj = onCleanup(@() cleanupTempDir(tempDir));
 
-    % unzip usually works regardless of extension if file is actually zip-based
-    unzip(xpsFile, tempDir);
+    % MATLAB's unzip is more reliable with a .zip extension
+    zipFile = fullfile(tempDir, 'archive.zip');
+    copyfile(xpsFile, zipFile);
+    extractDir = fullfile(tempDir, 'extracted');
+    mkdir(extractDir);
+    unzip(zipFile, extractDir);
 
     % Find FixedPage fdoc/fpage XML files
     pageFiles = [ ...
-        dir(fullfile(tempDir, '**', '*.fpage')); ...
-        dir(fullfile(tempDir, '**', '*.xml')) ];
+        dir(fullfile(extractDir, '**', '*.fpage')); ...
+        dir(fullfile(extractDir, '**', '*.xml')) ];
 
     txtParts = {};
 
@@ -33,6 +37,6 @@ function txt = extractTextFromXpsLikeFile(xpsFile)
 
     % Fallback: if no structured extraction worked, read all xml-like files as text
     if isempty(strtrim(txt))
-        txt = fallbackReadAllXmlText(tempDir);
+        txt = fallbackReadAllXmlText(extractDir);
     end
 end
